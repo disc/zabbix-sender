@@ -24,7 +24,7 @@ class SenderTest extends PHPUnit_Framework_TestCase
     {
         $this->sender = new Sender('localhost', 10051);
 
-        $this->sender = $this->getMockBuilder(Sender::class)
+        $this->sender = $this->getMockBuilder('Sender')
             ->disableOriginalConstructor()
             ->setMethods(['send','getResponse'])
             ->getMock();
@@ -50,7 +50,7 @@ class SenderTest extends PHPUnit_Framework_TestCase
      */
     public function testAddData()
     {
-        $method = new ReflectionMethod(Sender::class, 'getData');
+        $method = new ReflectionMethod('Sender', 'getData');
         $method->setAccessible(true);
 
         $this->assertCount(0, $method->invoke($this->sender));
