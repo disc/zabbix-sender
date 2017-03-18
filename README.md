@@ -2,7 +2,8 @@
 
 ## Synopsis
 
-Php implementation of zabbix_sender utility.
+Php implementation of zabbix_sender utility.  
+Required PHP 7.*.  
 Works with Zabbix 2.0.8 and 2.1.7+ versions.
 
 ## Code Example
