@@ -20,7 +20,7 @@ class Sender
 
     /**
     * Request data
-    * 
+    *
     * @var array
     */
     protected $data = [];
@@ -56,10 +56,9 @@ class Sender
     public function addData(
         $host,
         $key,
-        $value, 
+        $value,
         $clock = null
     ) {
-
         $data = [
             'host' => $host,
             'key' => $key,

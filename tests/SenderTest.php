@@ -26,13 +26,8 @@ class SenderTest extends PHPUnit_Framework_TestCase
 
         $this->sender = $this->getMockBuilder(Sender::class)
             ->disableOriginalConstructor()
-            ->setMethods(['send','getResponse'])
+            ->setMethods(['getResponse', 'sendData'])
             ->getMock();
-
-        $this->sender
-            ->expects($this->any())
-            ->method('send')
-            ->willReturn($this->sender);
 
         $this->sender
             ->expects($this->any())
@@ -89,8 +84,17 @@ class SenderTest extends PHPUnit_Framework_TestCase
      */
     public function testSend()
     {
+        $method = new ReflectionMethod(Sender::class, 'buildRequestBody');
+        $method->setAccessible(true);
+
         $this->sender->addData('host', 'some.key', 'test value');
         $this->sender->addData('host', 'some.key.2', 134);
+
+        $this->sender
+            ->expects($this->once())
+            ->method('sendData')
+            ->with($method->invoke($this->sender));
+
         $this->sender->send();
         $this->assertNotEmpty($this->sender->getResponse());
     }
