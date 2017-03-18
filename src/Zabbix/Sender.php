@@ -38,7 +38,7 @@ class Sender
      * @param string $server Zabbix host
      * @param int $port Zabbix port
      */
-    public function __construct(string $server, int $port = 10051)
+    public function __construct($server, $port = 10051)
     {
         $this->server = $server;
         $this->port = $port;
@@ -54,11 +54,11 @@ class Sender
      * @return \Disc\Zabbix\Sender
      */
     public function addData(
-        string $host, 
-        string $key, 
+        $host,
+        $key,
         $value, 
         $clock = null
-    ): Sender {
+    ) {
 
         $data = [
             'host' => $host,
@@ -80,7 +80,7 @@ class Sender
      *
      * @return \Disc\Zabbix\Sender
      */
-    public function send(): Sender
+    public function send()
     {
         $this->sendData(
             $this->buildRequestBody()
@@ -96,7 +96,7 @@ class Sender
      *
      * @return array
      */
-    public function getResponse(): array
+    public function getResponse()
     {
         return $this->response;
     }
@@ -106,7 +106,7 @@ class Sender
      *
      * @return array
      */
-    protected function getData(): array
+    protected function getData()
     {
         return $this->data;
     }
@@ -116,7 +116,7 @@ class Sender
 
      * @return string
      */
-    protected function buildRequestBody(): string
+    protected function buildRequestBody()
     {
         return json_encode([
             'request' => 'sender data',
@@ -130,7 +130,7 @@ class Sender
      * @param string $body Request body
      * @return void
      */
-    protected function sendData(string $body): void
+    protected function sendData($body)
     {
         $socket = socket_create(AF_INET, SOCK_STREAM, SOL_TCP);
 
@@ -149,7 +149,7 @@ class Sender
      * @param resource $socket
      * @return \Disc\Zabbix\Sender
      */
-    protected function parseResponse($socket): Sender
+    protected function parseResponse($socket)
     {
         // Get 1024 bytes from socket
         socket_recv($socket, $response, 1024, 0);
@@ -169,7 +169,7 @@ class Sender
      *
      * @return \Disc\Zabbix\Sender
      */
-    protected function clearData(): Sender
+    protected function clearData()
     {
         $this->data = [];
 

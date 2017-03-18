@@ -6,6 +6,13 @@ use PHPUnit_Framework_MockObject_MockObject;
 use PHPUnit_Framework_TestCase;
 use ReflectionMethod;
 
+/**
+ * Class SenderTest
+ * @package Disc\Zabbix\Tests
+ *
+ * @covers Disc\Zabbix\Sender
+ * @coversDefaultClass Disc\Zabbix\Sender
+ */
 class SenderTest extends PHPUnit_Framework_TestCase
 {
     /**

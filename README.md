@@ -1,9 +1,9 @@
-# Zabbix-sender [![Build Status](https://travis-ci.org/disc/zabbix-sender.svg?branch=master)](https://travis-ci.org/disc/zabbix-sender)
+# PHP Zabbix Sender [![Build Status](https://travis-ci.org/disc/zabbix-sender.svg?branch=master)](https://travis-ci.org/disc/zabbix-sender)
 
 ## Synopsis
 
 Php implementation of zabbix_sender utility.  
-Required PHP 7.*.  
+Required PHP 5.4+.  
 Works with Zabbix 2.0.8 and 2.1.7+ versions.
 
 ## Code Example
@@ -13,6 +13,7 @@ $sender = new \Disc\Zabbix\Sender('localhost', 10051);
 $sender->addData('hostname', 'some.key.2', 0.567);
 $sender->send();
 ```
+See sample/sample.php
 
 
 ## Installation
