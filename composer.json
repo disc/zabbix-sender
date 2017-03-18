@@ -1,13 +1,11 @@
 {
     "name": "disc/php-zabbix-sender",
-    "version": 0.1,
+    "version": "0.1",
     "description": "Zabbix Sender Client",
     "keywords": ["zabbix"],
     "type": "library",
     "require": {
-        "php": ">=7.0"
-    },
-    "require-dev": {
+        "php": ">=7.0",
         "phpunit/phpunit": "5.*"
     },
     "license": "MIT",
