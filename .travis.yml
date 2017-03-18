@@ -9,4 +9,4 @@ before_script:
   - travis_retry composer install --prefer-dist --dev
 
 script:
-  - phpunit --coverage-clover clover
+  - vendor/bin/phpunit --coverage-clover clover
