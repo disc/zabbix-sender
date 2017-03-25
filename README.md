@@ -2,8 +2,8 @@
 
 ## Synopsis
 
-Php implementation of zabbix_sender utility.  
-Required PHP 5.4+.  
+Modern php implementation of zabbix_sender utility.  
+Working on PHP 5.3+.  
 Works with Zabbix 2.0.8 and 2.1.7+ versions.
 
 ## Code Example
