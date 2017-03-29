@@ -2,7 +2,7 @@
 
 ## Synopsis
 
-Modern php implementation of Zabbix Sender Client.
+Modern php implementation of Zabbix Sender Client.  
 Support php versions PHP 5.3 and above.  
 Working with Zabbix 2.0.8 and 2.1.7+ versions.
 
