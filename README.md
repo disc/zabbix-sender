@@ -2,9 +2,9 @@
 
 ## Synopsis
 
-Modern php implementation of zabbix_sender utility.  
-Working on PHP 5.3+.  
-Works with Zabbix 2.0.8 and 2.1.7+ versions.
+Modern php implementation of Zabbix Sender Client.
+Support php versions PHP 5.3 and above.  
+Working with Zabbix 2.0.8 and 2.1.7+ versions.
 
 ## Code Example
 Easy to use:
