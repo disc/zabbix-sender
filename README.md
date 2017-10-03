@@ -27,7 +27,7 @@ Run `vendor/bin/phpunit` for tests
 
 ## Contributors
 
-Aleksandr Khachikyants [disc@mydbg.ru]
+Alexandr Hacicheant [discmd@ya.ru]
 
 ## License
 
