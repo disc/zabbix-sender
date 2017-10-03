@@ -1,4 +1,6 @@
-# PHP Zabbix Sender [![Build Status](https://travis-ci.org/disc/zabbix-sender.svg?branch=master)](https://travis-ci.org/disc/zabbix-sender)
+# PHP Zabbix Sender 
+[![Build Status](https://travis-ci.org/disc/zabbix-sender.svg?branch=master)](https://travis-ci.org/disc/zabbix-sender)
+[![MIT licensed](https://img.shields.io/badge/license-MIT-blue.svg)](./LICENSE)
 
 ## Synopsis
 
@@ -31,4 +33,4 @@ Alexandr Hacicheant [discmd@ya.ru]
 
 ## License
 
-MIT
+[The MIT License (MIT)](LICENSE)
