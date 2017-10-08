@@ -1,58 +1,82 @@
 <?php
+
 namespace Disc\Zabbix\Tests;
 
+use AspectMock\Kernel;
+use AspectMock\Test;
 use Disc\Zabbix\Sender;
-use PHPUnit_Framework_MockObject_MockObject;
+use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
+use Mockery\Mock;
 use PHPUnit_Framework_TestCase;
-use ReflectionMethod;
 
 /**
  * Class SenderTest
- * @package Disc\Zabbix\Tests
+ * @package \Disc\Zabbix\Tests
  *
- * @covers Disc\Zabbix\Sender
- * @coversDefaultClass Disc\Zabbix\Sender
+ * @covers \Disc\Zabbix\Sender
+ * @coversDefaultClass \Disc\Zabbix\Sender
  */
 class SenderTest extends PHPUnit_Framework_TestCase
 {
-    /**
-     * @var PHPUnit_Framework_MockObject_MockObject|\Disc\Zabbix\Sender
-     */
-    protected $sender;
+    use MockeryPHPUnitIntegration;
 
+    /**
+     * Prepare
+     */
     public function setUp()
     {
-        $this->sender = new Sender('localhost', 10051);
-
-        $this->sender = $this->getMockBuilder(Sender::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getResponse', 'sendData'])
-            ->getMock();
-
-        $this->sender
-            ->expects($this->any())
-            ->method('getResponse')
-            ->willReturn([
-                'response' => 'success',
-                'info' => 'processed: 1; failed: 1; total: 2; seconds spent: 0.000021',
-            ]);
+        $kernel = Kernel::getInstance();
+        $kernel->init([
+            'debug' => true,
+            'includePaths' => [__DIR__.'/../src']
+        ]);
     }
 
     /**
      * Test for getData
      *
      * @covers ::getData
+     * @covers ::send
      */
     public function testAddData()
     {
-        $method = new ReflectionMethod(Sender::class, 'getData');
-        $method->setAccessible(true);
+        /** @var Mock|Sender $sender */
+        $sender = \Mockery::mock(Sender::class . '[sendData]', ['localhost']);
+        $sender->shouldAllowMockingProtectedMethods();
+        $sender->shouldReceive('sendData')->once()->with(json_encode([
+            'request' => 'sender data',
+            'data' => [],
+        ]));
 
-        $this->assertCount(0, $method->invoke($this->sender));
-        $this->sender->addData('Host', 'test.key', 'some value');
-        $this->sender->addData('Host', 'another.key', 123);
-        $this->sender->addData('Host', 'one.more.key', 0.001, time());
-        $this->assertCount(3, $method->invoke($this->sender));
+        $sender->send();
+
+        $sender->addData('Host', 'test.key', 'some value');
+        $sender->addData('Host', 'another.key', 123);
+        $expectedTime = time();
+        $sender->addData('Host', 'one.more.key', 0.001, $expectedTime);
+
+        $sender->shouldReceive('sendData')->once()->with(json_encode([
+            'request' => 'sender data',
+            'data' => [
+                [
+                    'host' => 'Host',
+                    'key' => 'test.key',
+                    'value' => 'some value',
+                ],
+                [
+                    'host' => 'Host',
+                    'key' => 'another.key',
+                    'value' => 123,
+                ],
+                [
+                    'host' => 'Host',
+                    'key' => 'one.more.key',
+                    'value' => 0.001,
+                    'clock' => $expectedTime,
+                ],
+            ],
+        ]));
+        $sender->send();
     }
 
     /**
@@ -60,43 +84,31 @@ class SenderTest extends PHPUnit_Framework_TestCase
      *
      * @covers ::getData
      * @covers ::clearData
+     * @covers ::send
      */
     public function testClearData()
     {
-        $methodGetData = new ReflectionMethod(Sender::class, 'getData');
-        $methodGetData->setAccessible(true);
+        /** @var Mock|Sender $sender */
+        $sender = \Mockery::mock(Sender::class . '[sendData]', ['localhost']);
+        $sender->shouldAllowMockingProtectedMethods();
 
-        $methodClearData = new ReflectionMethod(Sender::class, 'clearData');
-        $methodClearData->setAccessible(true);
-
-        $this->sender->addData('Host', 'test.key', 'some value');
-        $this->sender->addData('Host', 'another.key', 123);
-        $this->assertCount(2, $methodGetData->invoke($this->sender));
-
-        $methodClearData->invoke($this->sender);
-        $this->assertCount(0, $methodGetData->invoke($this->sender));
-    }
-
-    /**
-     * Test for send
-     *
-     * @covers ::send
-     */
-    public function testSend()
-    {
-        $method = new ReflectionMethod(Sender::class, 'buildRequestBody');
-        $method->setAccessible(true);
-
-        $this->sender->addData('host', 'some.key', 'test value');
-        $this->sender->addData('host', 'some.key.2', 134);
-
-        $this->sender
-            ->expects($this->once())
-            ->method('sendData')
-            ->with($method->invoke($this->sender));
-
-        $this->sender->send();
-        $this->assertNotEmpty($this->sender->getResponse());
+        $sender->addData('Host', 'test.key', 'some value');
+        $sender->shouldReceive('sendData')->once()->with(json_encode([
+            'request' => 'sender data',
+            'data' => [
+                [
+                    'host' => 'Host',
+                    'key' => 'test.key',
+                    'value' => 'some value',
+                ]
+            ],
+        ]));
+        $sender->send();
+        $sender->shouldReceive('sendData')->once()->with(json_encode([
+            'request' => 'sender data',
+            'data' => [],
+        ]));
+        $sender->send();
     }
 
     /**
@@ -106,10 +118,16 @@ class SenderTest extends PHPUnit_Framework_TestCase
      */
     public function testGetResponse()
     {
-        $this->sender->addData('host', 'some.key.2', 134);
-        $this->sender->send();
-        $response = $this->sender->getResponse();
-        $this->assertArrayHasKey('response', $response);
-        $this->assertArrayHasKey('info', $response);
+        test::func('Disc\Zabbix', 'socket_create', '');
+        test::func('Disc\Zabbix', 'socket_connect', '');
+        test::func('Disc\Zabbix', 'socket_send', '');
+        test::func('Disc\Zabbix', 'socket_close', '');
+
+        /** @var Mock|Sender $sender */
+        $sender = \Mockery::mock(Sender::class)->makePartial();
+        $sender->shouldAllowMockingProtectedMethods();
+        $sender->shouldReceive('socketReceive')->andReturn('header       {"code": 100}');
+        $sender->send();
+        $this->assertSame(["code" => 100], $sender->getResponse());
     }
 }
