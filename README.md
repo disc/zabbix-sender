@@ -1,6 +1,7 @@
 # PHP Zabbix Sender 
 [![Build Status](https://travis-ci.org/disc/zabbix-sender.svg?branch=master)](https://travis-ci.org/disc/zabbix-sender)
 [![MIT licensed](https://img.shields.io/badge/license-MIT-blue.svg)](./LICENSE)
+[![Test Coverage](https://codeclimate.com/github/disc/zabbix-sender/badges/coverage.svg)](https://codeclimate.com/github/disc/zabbix-sender/coverage)
 
 ## Synopsis
 
