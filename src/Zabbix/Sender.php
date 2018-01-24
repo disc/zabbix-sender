@@ -150,7 +150,6 @@ class Sender
      */
     protected function parseResponse($socket)
     {
-        // Get 1024 bytes from socket
         $response = $this->socketReceive($socket);
 
         // Length of header in response 13 bytes
@@ -165,13 +164,16 @@ class Sender
 
     /**
      * Socket receive wrapper
+     * Returns first 1024 bytes of data from socket
      *
      * @param resource $socket
-     * @return int
+     * @return string
      */
     protected function socketReceive($socket)
     {
-        return socket_recv($socket, $response, 1024, 0);
+        socket_recv($socket, $response, 1024, 0);
+
+        return $response;
     }
 
     /**
