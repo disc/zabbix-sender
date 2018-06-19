@@ -33,15 +33,24 @@ class Sender
     protected $response = [];
 
     /**
+     * Timeout in seconds
+     *
+     * @var float
+     */
+    protected $timeout;
+
+    /**
      * Zabbix constructor.
      *
-     * @param string $server Zabbix host
-     * @param int $port Zabbix port
+     * @param string $server  Zabbix host
+     * @param int    $port    Zabbix port
+     * @param float  $timeout Connection timeout 1 second by default
      */
-    public function __construct($server, $port = 10051)
+    public function __construct($server, $port = 10051, $timeout = 1.0)
     {
-        $this->server = $server;
-        $this->port = $port;
+        $this->server  = $server;
+        $this->port    = $port;
+        $this->timeout = $timeout;
     }
 
     /**
@@ -132,10 +141,24 @@ class Sender
     protected function sendData($body)
     {
         $socket = socket_create(AF_INET, SOCK_STREAM, SOL_TCP);
+        if (!$socket) {
+            throw new \RuntimeException(socket_strerror(socket_last_error()));
+        }
 
-        socket_connect($socket, $this->server, $this->port);
+        // Set send and receive timeout
+        $timeoutSettings = ['sec' => floor($this->timeout), 'usec' => ($this->timeout - floor($this->timeout)) * 1e6];
+        socket_set_option($socket, SOL_SOCKET, SO_SNDTIMEO, $timeoutSettings);
+        socket_set_option($socket, SOL_SOCKET, SO_RCVTIMEO, $timeoutSettings);
 
-        socket_send($socket, $body, strlen($body), 0);
+        $result = socket_connect($socket, $this->server, $this->port);
+        if (!$result) {
+            throw new \RuntimeException(socket_strerror(socket_last_error($socket)));
+        }
+
+        $result = socket_send($socket, $body, strlen($body), 0);
+        if (false === $result) {
+            throw new \RuntimeException(socket_strerror(socket_last_error($socket)));
+        }
 
         $this->parseResponse($socket);
 
