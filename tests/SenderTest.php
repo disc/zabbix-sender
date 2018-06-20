@@ -28,7 +28,8 @@ class SenderTest extends PHPUnit_Framework_TestCase
         $kernel = Kernel::getInstance();
         $kernel->init([
             'debug' => true,
-            'includePaths' => [__DIR__.'/../src']
+            'includePaths' => [__DIR__.'/../src'],
+            'cacheDir' => sys_get_temp_dir(),
         ]);
     }
 
