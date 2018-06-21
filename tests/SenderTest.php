@@ -119,8 +119,9 @@ class SenderTest extends PHPUnit_Framework_TestCase
      */
     public function testGetResponse()
     {
-        test::func('Disc\Zabbix', 'socket_create', '');
-        test::func('Disc\Zabbix', 'socket_connect', '');
+        test::func('Disc\Zabbix', 'socket_create', function () { return true; });
+        test::func('Disc\Zabbix', 'socket_set_option', '');
+        test::func('Disc\Zabbix', 'socket_connect', function () { return true; });
         test::func('Disc\Zabbix', 'socket_send', '');
         test::func('Disc\Zabbix', 'socket_close', '');
 
@@ -130,5 +131,54 @@ class SenderTest extends PHPUnit_Framework_TestCase
         $sender->shouldReceive('socketReceive')->andReturn('header       {"code": 100}');
         $sender->send();
         $this->assertSame(["code" => 100], $sender->getResponse());
+    }
+
+    /**
+     * Test for getResponse
+     *
+     * @covers ::getResponse
+     */
+    public function testGetResponseFailedCreation()
+    {
+        test::clean();
+        test::func('Disc\Zabbix', 'socket_create', function () { return false; });
+
+        /** @var Mock|Sender $sender */
+        $sender = \Mockery::mock(Sender::class)->makePartial();
+        $this->expectException('RuntimeException');
+        $sender->send();
+    }
+
+    /**
+     * Test for getResponse
+     *
+     * @covers ::getResponse
+     */
+    public function testGetResponseFailedConnection()
+    {
+        test::clean();
+        test::func('Disc\Zabbix', 'socket_connect', function () { return false; });
+
+        /** @var Mock|Sender $sender */
+        $sender = \Mockery::mock(Sender::class)->makePartial();
+        $this->expectException('RuntimeException');
+        $sender->send();
+    }
+
+    /**
+     * Test for getResponse
+     *
+     * @covers ::getResponse
+     */
+    public function testGetResponseFailedSend()
+    {
+        test::clean();
+        test::func('Disc\Zabbix', 'socket_connect', function () { return true; });
+        test::func('Disc\Zabbix', 'socket_send', function () { return false; });
+
+        /** @var Mock|Sender $sender */
+        $sender = \Mockery::mock(Sender::class)->makePartial();
+        $this->expectException('RuntimeException');
+        $sender->send();
     }
 }
