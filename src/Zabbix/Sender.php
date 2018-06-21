@@ -46,11 +46,11 @@ class Sender
      * @param int    $port    Zabbix port
      * @param float  $timeout Connection timeout 1 second by default
      */
-    public function __construct($server, $port = 10051, $timeout = 1.0)
+    public function __construct($server, $port = 10051, $timeout = 0.0)
     {
         $this->server  = $server;
         $this->port    = $port;
-        $this->timeout = $timeout;
+        $this->timeout = (float)$timeout;
     }
 
     /**
