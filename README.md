@@ -7,7 +7,7 @@
 
 Modern php implementation of Zabbix Sender Client.  
 Support php versions PHP 5.3 and above.  
-Working with Zabbix 2.0.8 and 2.1.7+ versions.
+Working with Zabbix 2.0.8, 2.1.7+ and supports version 4.0.
 
 ## Code Example
 Easy to use:
@@ -30,7 +30,7 @@ Run `vendor/bin/phpunit` for tests
 
 ## Contributors
 
-Alexandr Hacicheant [discmd@ya.ru]
+Alexandr Hacicheant [a.hacicheant@gmail.com]
 
 ## License
 
