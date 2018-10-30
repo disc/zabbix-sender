@@ -42,12 +42,14 @@ class SenderTest extends PHPUnit_Framework_TestCase
     public function testAddData()
     {
         /** @var Mock|Sender $sender */
+        
         $sender = \Mockery::mock(Sender::class . '[sendData]', ['localhost']);
         $sender->shouldAllowMockingProtectedMethods();
-        $sender->shouldReceive('sendData')->once()->with(json_encode([
+        $data = json_encode([
             'request' => 'sender data',
             'data' => [],
-        ]));
+        ]);
+        $sender->shouldReceive('sendData')->once()->with("ZBXD\1" . pack('P', strlen($data)) . $data);
 
         $sender->send();
 
@@ -55,8 +57,7 @@ class SenderTest extends PHPUnit_Framework_TestCase
         $sender->addData('Host', 'another.key', 123);
         $expectedTime = time();
         $sender->addData('Host', 'one.more.key', 0.001, $expectedTime);
-
-        $sender->shouldReceive('sendData')->once()->with(json_encode([
+        $data = json_encode([
             'request' => 'sender data',
             'data' => [
                 [
@@ -76,7 +77,8 @@ class SenderTest extends PHPUnit_Framework_TestCase
                     'clock' => $expectedTime,
                 ],
             ],
-        ]));
+        ]);
+        $sender->shouldReceive('sendData')->once()->with("ZBXD\1" . pack('P', strlen($data)) . $data);
         $sender->send();
     }
 
@@ -94,7 +96,7 @@ class SenderTest extends PHPUnit_Framework_TestCase
         $sender->shouldAllowMockingProtectedMethods();
 
         $sender->addData('Host', 'test.key', 'some value');
-        $sender->shouldReceive('sendData')->once()->with(json_encode([
+        $data = json_encode([
             'request' => 'sender data',
             'data' => [
                 [
@@ -103,12 +105,14 @@ class SenderTest extends PHPUnit_Framework_TestCase
                     'value' => 'some value',
                 ]
             ],
-        ]));
+        ]);
+        $sender->shouldReceive('sendData')->once()->with("ZBXD\1" . pack('P', strlen($data)) . $data);
         $sender->send();
-        $sender->shouldReceive('sendData')->once()->with(json_encode([
+        $data = json_encode([
             'request' => 'sender data',
             'data' => [],
-        ]));
+        ]);
+        $sender->shouldReceive('sendData')->once()->with("ZBXD\1" . pack('P', strlen($data)) . $data);
         $sender->send();
     }
 

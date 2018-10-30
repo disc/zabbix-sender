@@ -126,10 +126,12 @@ class Sender
      */
     protected function buildRequestBody()
     {
-        return json_encode([
+        $data = json_encode([
             'request' => 'sender data',
             'data' => $this->getData(),
         ]);
+        
+        return "ZBXD\1" . pack('P', strlen($data)) . $data;
     }
 
     /**
