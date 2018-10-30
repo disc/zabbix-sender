@@ -77,7 +77,7 @@ class SenderTest extends PHPUnit_Framework_TestCase
                     'clock' => $expectedTime,
                 ],
             ],
-        ])
+        ]);
         $sender->shouldReceive('sendData')->once()->with("ZBXD\1" . pack('P', strlen($data)) . $data);
         $sender->send();
     }
@@ -105,13 +105,13 @@ class SenderTest extends PHPUnit_Framework_TestCase
                     'value' => 'some value',
                 ]
             ],
-        ])
+        ]);
         $sender->shouldReceive('sendData')->once()->with("ZBXD\1" . pack('P', strlen($data)) . $data);
         $sender->send();
         $data = json_encode([
             'request' => 'sender data',
             'data' => [],
-        ])
+        ]);
         $sender->shouldReceive('sendData')->once()->with("ZBXD\1" . pack('P', strlen($data)) . $data);
         $sender->send();
     }
