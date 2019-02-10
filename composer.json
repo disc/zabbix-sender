@@ -1,9 +1,11 @@
 {
     "name": "disc/php-zabbix-sender",
-    "version": "1.3.0",
+    "version": "1.3.1",
     "minimum-stability": "stable",
-    "description": "Php implementation of zabbix_sender utility. Works with Zabbix 2.0.8 and 2.1.7+ versions.",
-    "keywords": ["zabbix"],
+    "description": "PHP implementation of zabbix_sender utility. Works with Zabbix 2.0.8, 2.1.7+ and 4.0 versions.",
+    "keywords": [
+        "zabbix"
+    ],
     "type": "library",
     "require": {
         "php": ">=5.3"
@@ -16,11 +18,13 @@
     "license": "MIT",
     "authors": [
         {
-            "name": "disc",
+            "name": "Alexandr Hacicheant",
             "email": "a.hacicheant@gmail.com"
         }
     ],
     "autoload": {
-        "psr-4": {"Disc\\": "src/"}
+        "psr-4": {
+            "Disc\\": "src/"
+        }
     }
 }
