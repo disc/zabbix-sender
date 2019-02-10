@@ -49,7 +49,7 @@ class SenderTest extends PHPUnit_Framework_TestCase
             'request' => 'sender data',
             'data' => [],
         ]);
-        $sender->shouldReceive('sendData')->once()->with("ZBXD\1" . pack('P', strlen($data)) . $data);
+        $sender->shouldReceive('sendData')->once()->with("ZBXD\1" . pack('V', strlen($data)) . "\0\0\0\0" . $data);
 
         $sender->send();
 
@@ -78,7 +78,7 @@ class SenderTest extends PHPUnit_Framework_TestCase
                 ],
             ],
         ]);
-        $sender->shouldReceive('sendData')->once()->with("ZBXD\1" . pack('P', strlen($data)) . $data);
+        $sender->shouldReceive('sendData')->once()->with("ZBXD\1" . pack('V', strlen($data)) . "\0\0\0\0" . $data);
         $sender->send();
     }
 
@@ -106,13 +106,13 @@ class SenderTest extends PHPUnit_Framework_TestCase
                 ]
             ],
         ]);
-        $sender->shouldReceive('sendData')->once()->with("ZBXD\1" . pack('P', strlen($data)) . $data);
+        $sender->shouldReceive('sendData')->once()->with("ZBXD\1" . pack('V', strlen($data)) . "\0\0\0\0" . $data);
         $sender->send();
         $data = json_encode([
             'request' => 'sender data',
             'data' => [],
         ]);
-        $sender->shouldReceive('sendData')->once()->with("ZBXD\1" . pack('P', strlen($data)) . $data);
+        $sender->shouldReceive('sendData')->once()->with("ZBXD\1" . pack('V', strlen($data)) . "\0\0\0\0" . $data);
         $sender->send();
     }
 

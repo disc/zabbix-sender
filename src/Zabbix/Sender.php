@@ -130,8 +130,8 @@ class Sender
             'request' => 'sender data',
             'data' => $this->getData(),
         ]);
-        
-        return "ZBXD\1" . pack('P', strlen($data)) . $data;
+
+        return "ZBXD\1" . pack('V', strlen($data)) . "\0\0\0\0" . $data;
     }
 
     /**
