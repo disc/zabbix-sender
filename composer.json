@@ -1,6 +1,6 @@
 {
     "name": "disc/php-zabbix-sender",
-    "version": "1.3.1",
+    "version": "1.3.2",
     "minimum-stability": "stable",
     "description": "PHP implementation of zabbix_sender utility. Works with Zabbix 2.0.8, 2.1.7+ and 4.0 versions.",
     "keywords": [
